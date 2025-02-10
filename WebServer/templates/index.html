@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebVR part 2</title>
+    <meta aframe-injected="" name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta aframe-injected="" name="mobile-web-app-capable" content="yes">
+    <meta aframe-injected="" name="theme-color" content="black">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-teleport-controls@0.2.x/dist/aframe-teleport-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.x/dist/aframe-controller-cursor-component.min.js"></script>
+    <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/random-color.js"></script>
+    <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/snap.js"></script>
+    <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/intersection-spawn.js"></script>
+    <script src="../static/hello.js"></script>
+</head>
+<body>
+<a-scene id="scene">
+    <a-assets class="fullscreen1">
+        <img id="groundTexture" src="https://raw.githubusercontent.com/aframevr/aframe/master/examples/assets/img/radial-shadow-1.png">
+        <img id="skyTexture" src="https://raw.githubusercontent.com/aframevr/aframe/master/examples/assets/img/gray-gradient.jpg">
+        <a-mixin id="voxel" geometry="primitive: box; height: 0.5; width: 0.5; depth: 0.5"
+                 material="shader: standard" random-color snap="offset: 0.25 0.25 0.25; snap: 0.5 0.5 0.5"></a-mixin>
+    </a-assets>
+    <a-cylinder id="ground" src="#groundTexture" radius="30" height="0.1"></a-cylinder>
+    <a-sky id="background" src="#skyTexture" theta-length="90" radius="30"></a-sky>
+    <a-plane id="screen" color="#fcd000" material="opacity: 0.2; transparent: true"></a-plane>
+    <a-text id="textScreen"></a-text>
+    <a-entity id="cam" position="5 3 5">
+        <a-camera fov="80"></a-camera>
+    </a-entity>
+    <button onclick="selectedShape = 'box'; console.log('Selected shape: Box')">Select Box</button>
+    <button onclick="selectedShape = 'sphere'; console.log('Selected shape: Sphere')">Select Sphere</button>
+</a-scene>
+</body>
+</html>
