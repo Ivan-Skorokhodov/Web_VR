@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var websocket = new WebSocket("ws://localhost:8000");
 
+  var websocketForSendCoords = new WebSocket("ws://localhost:8001");
+
   websocket.onmessage = function (event) {
     redata(JSON.parse(event.data));
   };
@@ -253,6 +255,12 @@ document.addEventListener("DOMContentLoaded", function () {
     scene.appendChild(textEl);
 
     boxes["box_" + box_id] = [position.x, position.y, position.z];
+    sendBoxCoordinates(
+      "box_" + box_id,
+      position.x + 0.5,
+      position.y + 0.5,
+      position.z
+    );
     box_id++;
     console.log(boxes);
   }
@@ -303,6 +311,16 @@ document.addEventListener("DOMContentLoaded", function () {
           `(${newX.toFixed(2)}, ${newY.toFixed(2)}, ${newZ.toFixed(2)})`
         );
       }
+
+      sendBoxCoordinates(boxId, newX + 0.5, newY + 0.5, newZ);
+    }
+  }
+
+  function sendBoxCoordinates(boxId, x, y, z) {
+    if (websocketForSendCoords.readyState === WebSocket.OPEN) {
+      websocketForSendCoords.send(
+        JSON.stringify({ id: boxId, x: x, y: y, z: z })
+      );
     }
   }
 

@@ -22,7 +22,12 @@ vert_standard_palm = 8
 global is_calibrated
 global is_first_calibration
 
+connected_clients = set()
+
+
 async def send_one_position(websocket, path):
+
+    connected_clients.add(websocket)
 
     is_calibrated = False
     is_first_calibration = True
@@ -67,8 +72,10 @@ async def send_one_position(websocket, path):
                         z.append(normalized_landmark.z)
 
                 # в пикселях
-                palm_vert = (((x[9] - x[0]) * image_width) ** 2 + ((y[9] - y[0]) * image_height) ** 2) ** 0.5
-                palm_hor = (((x[17] - x[5]) * image_width) ** 2 + ((y[17] - y[5]) * image_height) ** 2) ** 0.5
+                palm_vert = (((x[9] - x[0]) * image_width) **
+                             2 + ((y[9] - y[0]) * image_height) ** 2) ** 0.5
+                palm_hor = (((x[17] - x[5]) * image_width) **
+                            2 + ((y[17] - y[5]) * image_height) ** 2) ** 0.5
 
                 if not is_calibrated:
 
@@ -95,7 +102,6 @@ async def send_one_position(websocket, path):
                     z_palm = palm_standard_hor * z_standard / palm_hor
                     pix = hor_standard_palm / palm_hor
 
-
                 coords_vr_x = []
                 coords_vr_y = []
                 coords_vr_z = []
@@ -107,8 +113,7 @@ async def send_one_position(websocket, path):
                     coords_vr_x.append(xi)
                     coords_vr_y.append(yi)
                     coords_vr_z.append(zi)
-                
-                
+
                 x_max = max(coords_vr_x)
                 x_min = min(coords_vr_x)
 
@@ -116,14 +121,14 @@ async def send_one_position(websocket, path):
                 y_min = min(coords_vr_y)
 
                 if is_first_calibration:
-                    y_open_palm_len= y_max - y_min
-                    x_open_palm_len= x_max - x_min
+                    y_open_palm_len = y_max - y_min
+                    x_open_palm_len = x_max - x_min
 
                     square_open_palm = y_open_palm_len * x_open_palm_len
                     square_close_palm = square_open_palm * 0.7
 
                     is_first_calibration = False
-                
+
                 is_clenched = 0
                 if square_close_palm > (x_max - x_min) * (y_max - y_min):
                     is_clenched = 1
@@ -135,14 +140,13 @@ async def send_one_position(websocket, path):
                     'x21': x_centre_cube,
                     'y21': y_centre_cube,
                     'z21': z_palm,
-                    'isClenched': is_clenched # 0 - open, 1 - close
+                    'isClenched': is_clenched  # 0 - open, 1 - close
                 }
 
                 for i in range(21):
                     data['x' + str(i)] = coords_vr_x[i]
                     data['y' + str(i)] = coords_vr_y[i]
                     data['z' + str(i)] = coords_vr_z[i] + z_palm
-
 
             try:
                 print("Sent: ", data)
@@ -156,13 +160,14 @@ async def send_one_position(websocket, path):
 async def main():
     server = await websockets.serve(send_one_position, "localhost", 8000)
     print("WebSocket server started on ws://localhost:8000")
-    
 
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
-        loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown(server)))
-    
+        loop.add_signal_handler(
+            sig, lambda: asyncio.create_task(shutdown(server)))
+
     await server.wait_closed()
+
 
 async def shutdown(server):
     print("Shutting down server...")
