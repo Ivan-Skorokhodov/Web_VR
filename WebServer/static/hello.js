@@ -232,10 +232,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     boxEl.setAttribute("position", position);
     boxEl.setAttribute("id", "box_" + box_id);
+
+    // Создаем текстовый элемент для отображения координат
+    var textEl = document.createElement("a-text");
+    textEl.setAttribute("id", "text_box_" + box_id);
+    textEl.setAttribute(
+      "value",
+      `(${position.x.toFixed(2)}, ${position.y.toFixed(
+        2
+      )}, ${position.z.toFixed(2)})`
+    );
+    textEl.setAttribute("color", "#FFFFFF");
+    textEl.setAttribute("position", {
+      x: position.x + 0.5,
+      y: position.y + 0.5,
+      z: position.z,
+    });
+
     scene.appendChild(boxEl);
+    scene.appendChild(textEl);
 
     boxes["box_" + box_id] = [position.x, position.y, position.z];
-    box_id = box_id + 1;
+    box_id++;
     console.log(boxes);
   }
 
@@ -263,6 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function moveBoxToPoint(boxId, targetX, targetY, targetZ) {
     var box = document.getElementById(boxId);
+    var textEl = document.getElementById("text_" + boxId);
     if (box) {
       var currentPosition = box.object3D.position;
       var newX = currentPosition.x + (targetX - currentPosition.x) * moveSpeed;
@@ -271,6 +290,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
       box.object3D.position.set(newX, newY, newZ);
       boxes[boxId] = [newX, newY, newZ];
+
+      // Обновляем текст с координатами
+      if (textEl) {
+        textEl.setAttribute("position", {
+          x: newX + 0.5,
+          y: newY + 0.5,
+          z: newZ,
+        });
+        textEl.setAttribute(
+          "value",
+          `(${newX.toFixed(2)}, ${newY.toFixed(2)}, ${newZ.toFixed(2)})`
+        );
+      }
     }
   }
 
