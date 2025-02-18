@@ -255,12 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
     scene.appendChild(textEl);
 
     boxes["box_" + box_id] = [position.x, position.y, position.z];
-    sendBoxCoordinates(
-      "box_" + box_id,
-      position.x + 0.5,
-      position.y + 0.5,
-      position.z
-    );
+    sendBoxCoordinates("box_" + box_id, position.x, position.y, position.z);
     box_id++;
     console.log(boxes);
   }
@@ -312,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
       }
 
-      sendBoxCoordinates(boxId, newX + 0.5, newY + 0.5, newZ);
+      sendBoxCoordinates(boxId, newX, newY, newZ);
     }
   }
 
