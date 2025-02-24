@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
     redata(JSON.parse(event.data));
   };
 
+  createWireframeCube(1, 0.2, 2.5);
+  createWireframeCube(3, 0.2, 2.5);
+
   var box_id = 0;
   var boxes = [];
   var flag = false;
@@ -57,6 +60,71 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   var showLabels = false; // Переменная для управления показом/скрытием надписей
+
+  function createWireframeCube(deltaX, deltaY, deltaZ) {
+    var cubeEdges = [
+      [
+        { x: -1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+        { x: 1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+        { x: 1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+        { x: -1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+      ],
+      [
+        { x: -1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+        { x: -1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: -1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+        { x: 1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+        { x: 1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+        { x: -1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+      ],
+      [
+        { x: -1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+        { x: -1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: -1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+        { x: -1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 0 + deltaY, z: -1 + deltaZ },
+        { x: 1 + deltaX, y: 2 + deltaY, z: -1 + deltaZ },
+      ],
+      [
+        { x: 1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+        { x: 1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+      ],
+      [
+        { x: -1 + deltaX, y: 0 + deltaY, z: 1 + deltaZ },
+        { x: -1 + deltaX, y: 2 + deltaY, z: 1 + deltaZ },
+      ],
+    ];
+
+    cubeEdges.forEach((edge, index) => {
+      var lineEl = document.createElement("a-entity");
+      lineEl.setAttribute("id", "cube_edge_" + index);
+      lineEl.setAttribute("line", {
+        start: `${edge[0].x} ${edge[0].y} ${edge[0].z}`,
+        end: `${edge[1].x} ${edge[1].y} ${edge[1].z}`,
+        color: "#FFFFFF",
+        width: 0.1,
+      });
+      scene.appendChild(lineEl);
+    });
+  }
 
   function redata(data) {
     if (data !== null) {
