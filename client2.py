@@ -44,12 +44,13 @@ async def handle_connection(websocket, path):
             inside_wire_box_0 = is_inside_box(cube, wire_box_0)
             inside_wire_box_1 = is_inside_box(cube, wire_box_1)
 
-            """ response = {
+            response = {
                 'id': cube['id'],
-                'inside_box_0': inside
+                'inside_box_0': inside_wire_box_0,
+                'inside_box_1': inside_wire_box_1
             }
 
-            await websocket.send(json.dumps(response)) """
+            await websocket.send(json.dumps(response))
 
             print(
                 f"Received: ID={data['id']}, X={data['x']}, Y={data['y']}, Z={data['z']}")

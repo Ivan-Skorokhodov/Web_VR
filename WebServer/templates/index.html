@@ -19,8 +19,26 @@
     <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/snap.js"></script>
     <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/intersection-spawn.js"></script>
     <script src="../static/hello.js"></script>
+
+    <style>
+      #notification {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ff4747;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
   </head>
   <body>
+    <div id="notification">Куб попал внутрь другого объекта</div>
     <a-scene id="scene">
       <a-assets class="fullscreen1">
         <img

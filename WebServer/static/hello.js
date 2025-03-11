@@ -16,6 +16,32 @@ document.addEventListener("DOMContentLoaded", function () {
     redata(JSON.parse(event.data));
   };
 
+  websocketForSendCoords.onmessage = function (event) {
+    try {
+      var data = JSON.parse(event.data);
+
+      if (data.inside_box_0 || data.inside_box_1) {
+        if (data.inside_box_0) {
+          showNotification(`Куб с ID ${data.id} попал внутрь первого объекта!`);
+        } else {
+          showNotification(`Куб с ID ${data.id} попал внутрь второго объекта!`);
+        }
+      }
+    } catch (e) {
+      console.error("Ошибка обработки данных:", e);
+    }
+  };
+
+  function showNotification(message) {
+    var notification = document.getElementById("notification");
+    notification.textContent = message;
+    notification.style.display = "block";
+
+    setTimeout(function () {
+      notification.style.display = "none";
+    }, 7000);
+  }
+
   createWireframeCube(1, 0.2, 2.5);
   createWireframeCube(3, 0.2, 2.5);
 
